@@ -89,10 +89,9 @@ input {
     margin: 10px;
     outline: none;
     transition: var(--transition-fast);
-    caret-color: #ffffff; /* Cor do cursor pisca-pisca (barrinha de texto) em branco */
+    caret-color: #ffffff;
 }
 
-/* Cor inicial do texto do placeholder */
 input::placeholder {
     color: var(--color-gold-base);
     opacity: 1;
@@ -112,9 +111,8 @@ input::placeholder {
     transform: scale(1.02);
 }
 
-/* DESTAQUE VISUAL AO CLICAR (FOCO NO CAMPO): SUMIR O TEXTO E DEIXAR A BARRINHA */
 input:focus::placeholder {
-    opacity: 0; /* Faz a palavra (E-mail / Senha) desaparecer ao clicar */
+    opacity: 0;
 }
 
 .input-group input:focus {

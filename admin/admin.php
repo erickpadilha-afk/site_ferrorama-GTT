@@ -2,7 +2,6 @@
 session_start();
 require_once __DIR__ . '/../config/conexao.php';
 
-// Bloqueia acesso de utilizadores não autenticados ou não administradores
 if (!isset($_SESSION['id_usuario'])) {
     header("Location: ../pagina-inicial/index.php");
     exit;
@@ -13,7 +12,6 @@ if (isset($_SESSION['papel']) && $_SESSION['papel'] !== 'administrador') {
     exit;
 }
 
-// Obter nome do utilizador logado
 if (isset($_SESSION['nome']) && !empty($_SESSION['nome'])) {
     $nome_completo = $_SESSION['nome'];
 } else {
@@ -33,16 +31,10 @@ if (isset($_SESSION['nome']) && !empty($_SESSION['nome'])) {
 $partes_nome = explode(' ', trim($nome_completo));
 $primeiro_nome = $partes_nome[0];
 
-// ==========================================
-// CONSULTAS DINÂMICAS AO BANCO DE DADOS
-// ==========================================
-
-// 1. Velocidade Média Atual (da última leitura registrada)
 $res_vel = $conexao->query("SELECT AVG(velocidade_kmh) as vel_media FROM leitura_sensor WHERE data_hora >= NOW() - INTERVAL 1 DAY");
 $row_vel = $res_vel ? $res_vel->fetch_assoc() : null;
 $velocidade_media = !empty($row_vel['vel_media']) ? number_format($row_vel['vel_media'], 1, ',', '.') : '0.0';
 
-// 2. Contagem de Trens por Situação/Status
 $res_trens = $conexao->query("SELECT situacao_trem, COUNT(*) as qtd FROM trens GROUP BY situacao_trem");
 $qtd_ativos = 0;
 $qtd_manutencao = 0;
@@ -56,11 +48,9 @@ if ($res_trens) {
     }
 }
 
-// 3. Contagem Total de Utilizadores/Passageiros
 $res_user = $conexao->query("SELECT COUNT(*) as total_users FROM usuario");
 $total_passageiros = $res_user ? $res_user->fetch_assoc()['total_users'] : 0;
 
-// 4. Painel de Alertas Ativos
 $res_total_alertas = $conexao->query("SELECT COUNT(*) as total FROM alertas");
 $total_alertas = $res_total_alertas ? $res_total_alertas->fetch_assoc()['total'] : 0;
 
@@ -70,7 +60,6 @@ $qtd_criticos = $res_criticos ? $res_criticos->fetch_assoc()['total'] : 0;
 $res_avisos = $conexao->query("SELECT COUNT(*) as total FROM alertas WHERE severidade = 'atencao'");
 $qtd_avisos = $res_avisos ? $res_avisos->fetch_assoc()['total'] : 0;
 
-// Buscar os 4 alertas mais recentes
 $res_lista_alertas = $conexao->query("
     SELECT a.*, t.prefixo_trem 
     FROM alertas a
@@ -79,11 +68,9 @@ $res_lista_alertas = $conexao->query("
     ORDER BY a.data_hora DESC LIMIT 4
 ");
 
-// 5. Painel de Sensores/Leituras Críticas
 $res_total_sensores_criticos = $conexao->query("SELECT COUNT(*) as total FROM leitura_sensor WHERE temperatura_motor_c > 90 OR velocidade_kmh > 80");
 $qtd_leituras_criticas = $res_total_sensores_criticos ? $res_total_sensores_criticos->fetch_assoc()['total'] : 0;
 
-// Buscar as 4 leituras críticas mais recentes
 $res_lista_criticas = $conexao->query("
     SELECT l.*, t.prefixo_trem 
     FROM leitura_sensor l
@@ -98,7 +85,7 @@ $res_lista_criticas = $conexao->query("
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Administrador - GTT</title>
-    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="admin.css?v=6">
 </head>
 <body>
 
@@ -128,15 +115,14 @@ $res_lista_criticas = $conexao->query("
 
     <main class="main-content">
         
-        <h1 class="page-title">Análise recente</h1>
+        <h1 class="page-title">Análise Recente</h1>
 
-        <!-- Banner com Estatísticas Dinâmicas do Banco -->
         <section class="stats-banner">
             <div class="stat-box">
                 <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                 </svg>
-                <span class="stat-num"><?php echo $velocidade_media; ?> Km/H</span>
+                <span class="stat-num"><?php echo $velocidade_media; ?> Km/h</span>
                 <span class="stat-desc">Velocidade Média</span>
             </div>
 
@@ -176,62 +162,66 @@ $res_lista_criticas = $conexao->query("
             </div>
         </section>
 
-        <!-- Grade Dinâmica com Listagem em Tempo Real -->
         <section class="dashboard-grid">
             
-            <!-- Painel de Alertas Ativos -->
             <div class="card-panel">
                 <h2 class="panel-header">Alertas Ativos</h2>
                 
                 <div class="alert-summary">
                     <span class="alert-big-number"><?php echo $total_alertas; ?></span>
-                    <svg class="warning-icon" viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2">
-                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-                        <line x1="12" y1="9" x2="12" y2="13"/>
-                        <line x1="12" y1="17" x2="12.01" y2="17"/>
-                    </svg>
+                    <div class="icon-pulse-wrapper">
+                        <svg class="warning-icon" viewBox="0 0 24 24" fill="none" stroke="#e63946" stroke-width="2">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                            <line x1="12" y1="9" x2="12" y2="13"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                    </div>
                     <div class="alert-labels">
-                        <span><?php echo $qtd_criticos; ?> Críticos</span>
-                        <span><?php echo $qtd_avisos; ?> Avisos</span>
+                        <span class="badge-critico"><?php echo $qtd_criticos; ?> Críticos</span>
+                        <span class="badge-aviso"><?php echo $qtd_avisos; ?> Avisos</span>
                     </div>
                 </div>
 
                 <ul class="alert-list">
                     <?php if ($res_lista_alertas && $res_lista_alertas->num_rows > 0): ?>
                         <?php while ($alerta = $res_lista_alertas->fetch_assoc()): ?>
-                            <li>#<?php echo htmlspecialchars($alerta['prefixo_trem']); ?>: <?php echo htmlspecialchars($alerta['mensagem']); ?></li>
+                            <li class="alert-item">
+                                <span class="trem-badge">#<?php echo htmlspecialchars($alerta['prefixo_trem']); ?></span>
+                                <span class="alert-desc"><?php echo htmlspecialchars($alerta['mensagem']); ?></span>
+                            </li>
                         <?php endwhile; ?>
                     <?php else: ?>
-                        <li>Nenhum alerta ativo registrado.</li>
+                        <li class="alert-item empty">Nenhum alerta ativo registrado.</li>
                     <?php endif; ?>
                 </ul>
             </div>
 
-            <!-- Painel de Sensores Críticos -->
             <div class="card-panel">
-                <h2 class="panel-header">Sensores críticos</h2>
+                <h2 class="panel-header">Sensores Críticos</h2>
                 
                 <div class="alert-summary">
-                    <span class="alert-big-number"><?php echo $qtd_leituras_criticas; ?></span>
+                    <span class="alert-big-number text-critical"><?php echo $qtd_leituras_criticas; ?></span>
                     <span class="critical-text">Leituras críticas</span>
                 </div>
 
                 <ul class="alert-list">
                     <?php if ($res_lista_criticas && $res_lista_criticas->num_rows > 0): ?>
                         <?php while ($critica = $res_lista_criticas->fetch_assoc()): ?>
-                            <li>
-                                #<?php echo htmlspecialchars($critica['prefixo_trem']); ?>: 
-                                <?php 
-                                    if ($critica['temperatura_motor_c'] > 90) {
-                                        echo "Temperatura " . number_format($critica['temperatura_motor_c'], 1, ',', '.') . "°C";
-                                    } else {
-                                        echo "Velocidade " . number_format($critica['velocidade_kmh'], 1, ',', '.') . " Km/h";
-                                    }
-                                ?>
+                            <li class="alert-item critical-border">
+                                <span class="trem-badge">#<?php echo htmlspecialchars($critica['prefixo_trem']); ?></span>
+                                <span class="alert-desc">
+                                    <?php 
+                                        if ($critica['temperatura_motor_c'] > 90) {
+                                            echo "<strong class='text-danger'>Temperatura: " . number_format($critica['temperatura_motor_c'], 1, ',', '.') . " °C</strong>";
+                                        } else {
+                                            echo "<strong class='text-warning'>Velocidade: " . number_format($critica['velocidade_kmh'], 1, ',', '.') . " Km/h</strong>";
+                                        }
+                                    ?>
+                                </span>
                             </li>
                         <?php endwhile; ?>
                     <?php else: ?>
-                        <li>Nenhuma leitura crítica recente.</li>
+                        <li class="alert-item empty">Nenhuma leitura crítica recente.</li>
                     <?php endif; ?>
                 </ul>
             </div>

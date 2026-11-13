@@ -11,7 +11,6 @@ body {
     min-height: 100vh;
 }
 
-/* --- HEADER / NAVIGATION --- */
 
 .sticky-bar {
     position: sticky;
@@ -103,7 +102,6 @@ body {
     fill: #000000;
 }
 
-/* --- MAIN CONTENT --- */
 
 .main-content {
     max-width: 1200px;
@@ -128,7 +126,6 @@ body {
     font-weight: normal;
 }
 
-/* --- MESSAGES & ALERTS --- */
 
 .alert-msg {
     padding: 12px 20px;
@@ -147,7 +144,6 @@ body {
     color: #ffffff;
 }
 
-/* --- FORM SECTION --- */
 
 .form-section {
     background-color: #cca424;
@@ -222,7 +218,6 @@ body {
     font-weight: bold;
 }
 
-/* --- SEARCH & FILTERS --- */
 
 .search-section {
     margin-bottom: 25px;
@@ -265,7 +260,6 @@ body {
     align-items: center;
 }
 
-/* --- TABLE SECTION --- */
 
 .table-section {
     overflow-x: auto;
@@ -292,7 +286,6 @@ body {
     font-weight: bold;
 }
 
-/* BADGES DE PAPEL */
 
 .badge {
     padding: 5px 10px;
@@ -313,7 +306,6 @@ body {
     color: #ffffff;
 }
 
-/* TABLE ACTIONS */
 
 .actions-cell {
     display: flex;

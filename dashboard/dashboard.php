@@ -14,7 +14,6 @@ if (!isset($_SESSION['id_usuario'])) {
 
 $id_usuario = $_SESSION['id_usuario'];
 
-// Busca o NOME real e o PAPEL diretamente da tabela usuario
 $nome_exibicao = 'Usuário';
 $papel = $_SESSION['papel'] ?? 'cliente';
 
@@ -33,14 +32,8 @@ if (isset($conexao) && $conexao) {
     } catch (Exception $e) {}
 }
 
-// Pega o primeiro nome para a barra
 $primeiro_nome = explode(' ', trim($nome_exibicao))[0];
 
-// =========================================================================
-// CONSULTAS DOS 5 INDICADORES DO PAINEL (BLOCO 4)
-// =========================================================================
-
-// 1. Contagem de trens por status ou modelo
 $trens_por_status = [];
 $total_trens = 0;
 
@@ -63,7 +56,6 @@ if (isset($conexao) && $conexao) {
 }
 $total_trens = array_sum($trens_por_status);
 
-// 2. Alertas ativos por severidade
 $alertas_por_sev = [];
 if (isset($conexao) && $conexao) {
     try {
@@ -74,7 +66,6 @@ if (isset($conexao) && $conexao) {
     } catch (mysqli_sql_exception $e) {}
 }
 
-// 3. Sensores com leitura crítica
 $sensores_criticos_qtd = 0;
 $tem_registro_alertas = false;
 
@@ -92,7 +83,6 @@ if (isset($conexao) && $conexao) {
     } catch (mysqli_sql_exception $e) {}
 }
 
-// 4. Viagens em andamento
 $viagens_andamento_qtd = 0;
 $tem_registro_rotas = false;
 
@@ -110,7 +100,6 @@ if (isset($conexao) && $conexao) {
     } catch (mysqli_sql_exception $e) {}
 }
 
-// 5. Velocidade média da frota
 $velocidade_media = null;
 
 if (isset($conexao) && $conexao) {
@@ -128,7 +117,7 @@ if (isset($conexao) && $conexao) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Golden Train Track - Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 
@@ -140,7 +129,6 @@ if (isset($conexao) && $conexao) {
                 </a>
             </div>
             
-            <!-- MENU COM TRENS E DEMAIS ABAS DE NAVEGAÇÃO -->
             <ul class="nav-links">
                 <li class="nav-item active"><a href="dashboard.php">Início</a></li>
                 <li class="nav-item"><a href="Barra/trens/trens.php">Trens</a></li>
@@ -163,7 +151,6 @@ if (isset($conexao) && $conexao) {
         
         <h1 class="welcome-title">Painel Operacional GTT</h1>
 
-        <!-- INDICADORES REAIS DO BANCO -->
         <section class="stats-container">
             <div class="info-card">
                 <span class="stat-number">

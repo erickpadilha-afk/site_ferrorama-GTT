@@ -54,7 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - GTT</title>
-    <!-- O parâmetro ?v=3 força a atualização limpa do CSS sem cache -->
     <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>

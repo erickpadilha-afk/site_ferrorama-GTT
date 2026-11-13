@@ -5,13 +5,10 @@ require_once __DIR__ . '/../config/conexao.php';
 $mensagem = "";
 $tipo_mensagem = "";
 
-// Se o usuário acessar a página diretamente (GET) sem enviar um formulário e sem clicar em "reset",
-// limpamos o estado para forçar a inicialização na Etapa 1
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && !isset($_GET['reset']) && !isset($_GET['manter_etapa'])) {
     unset($_SESSION['recuperacao_etapa'], $_SESSION['recuperacao_email'], $_SESSION['recuperacao_codigo']);
 }
 
-// Botão / Ação de reset explícita
 if (isset($_GET['reset'])) {
     unset($_SESSION['recuperacao_etapa'], $_SESSION['recuperacao_email'], $_SESSION['recuperacao_codigo']);
     header("Location: NovaSenha.php");
@@ -20,7 +17,6 @@ if (isset($_GET['reset'])) {
 
 $etapa = $_SESSION['recuperacao_etapa'] ?? 1;
 
-// ETAPA 1: SOLICITAR CÓDIGO
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_solicitar_codigo'])) {
     $email = trim($_POST['email'] ?? '');
 
@@ -46,7 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_solicitar_codigo
     }
 }
 
-// ETAPA 2: REDEFINIR SENHA
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_redefinir_senha'])) {
     $codigo_digitado = trim($_POST['codigo'] ?? '');
     $nova_senha      = $_POST['nova_senha'] ?? '';
@@ -83,7 +78,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_redefinir_senha'
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recuperar Senha - GTT</title>
-    <!-- Versão do CSS alterada para v=3 para evitar cache -->
     <link rel="stylesheet" href="NovaSenha.css?v=3">
 </head>
 <body>
@@ -104,7 +98,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_redefinir_senha'
         <?php endif; ?>
 
         <?php if ($etapa === 1): ?>
-            <!-- ETAPA 1 -->
             <form id="formEtapa1" method="POST" action="NovaSenha.php" class="login-form" autocomplete="off">
                 <div class="input-group">
                     <input type="email" id="email" name="email" placeholder="Digite seu E-mail" required autocomplete="off" onfocus="this.placeholder=''" onblur="this.placeholder='Digite seu E-mail'">
@@ -117,7 +110,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_redefinir_senha'
             </form>
 
         <?php else: ?>
-            <!-- ETAPA 2 -->
             <form id="formEtapa2" method="POST" action="NovaSenha.php" class="login-form" autocomplete="off">
                 <p class="txt-email-destino">
                     Para: <strong><?php echo htmlspecialchars($_SESSION['recuperacao_email'] ?? ''); ?></strong>

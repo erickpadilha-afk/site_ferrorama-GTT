@@ -33,7 +33,6 @@ if (!empty($condicoes)) {
     $sql .= " WHERE " . implode(" AND ", $condicoes);
 }
 
-// Requisito do Guia: LIMIT 100 para não travar a aplicação
 $sql .= " ORDER BY l.data_hora DESC LIMIT 100";
 
 if (!empty($valores)) {

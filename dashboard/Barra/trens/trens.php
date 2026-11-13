@@ -38,7 +38,7 @@ $primeiro_nome = !empty($palavras[0]) ? mb_convert_case($palavras[0], MB_CASE_TI
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Golden Train Track - Trens</title>
-    <link rel="stylesheet" href="trensStyle.css">
+    <link rel="stylesheet" href="trensStyle.css?v=5">
 </head>
 <body>
 
@@ -73,7 +73,7 @@ $primeiro_nome = !empty($palavras[0]) ? mb_convert_case($palavras[0], MB_CASE_TI
             <h2>Lista dos trens rodando agora <br><small>(09:00 até 11:30)</small></h2>
             
             <div class="train-list">
-                <div class="train-card" onclick="window.location.href='../viajar/viajar.html'">
+                <div class="train-card" onclick="window.location.href='../viajar/viajar.php'">
                     <div class="train-icon">🚂</div>
                     <div class="train-info">
                         <h3>São Paulo, SP &rarr; Campinas, SP</h3>
@@ -81,7 +81,7 @@ $primeiro_nome = !empty($palavras[0]) ? mb_convert_case($palavras[0], MB_CASE_TI
                     </div>
                 </div>
 
-                <div class="train-card" onclick="window.location.href='../viajar/viajar.html'">
+                <div class="train-card" onclick="window.location.href='../viajar/viajar.php'">
                     <div class="train-icon">🚂</div>
                     <div class="train-info">
                         <h3>São Paulo, SP &rarr; Rio de Janeiro, RJ</h3>
@@ -89,7 +89,7 @@ $primeiro_nome = !empty($palavras[0]) ? mb_convert_case($palavras[0], MB_CASE_TI
                     </div>
                 </div>
 
-                <div class="train-card" onclick="window.location.href='../viajar/viajar.html'">
+                <div class="train-card" onclick="window.location.href='../viajar/viajar.php'">
                     <div class="train-icon">🚂</div>
                     <div class="train-info">
                         <h3>São Paulo, SP &rarr; Curitiba, PR</h3>
@@ -97,7 +97,7 @@ $primeiro_nome = !empty($palavras[0]) ? mb_convert_case($palavras[0], MB_CASE_TI
                     </div>
                 </div>
 
-                <div class="train-card" onclick="window.location.href='../viajar/viajar.html'">
+                <div class="train-card" onclick="window.location.href='../viajar/viajar.php'">
                     <div class="train-icon">🚂</div>
                     <div class="train-info">
                         <h3>Rio de Janeiro, RJ &rarr; Belo Horizonte, MG</h3>

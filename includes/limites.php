@@ -1,9 +1,9 @@
 <?php
 define('LIMITES_SENSORES', [
-    'velocidade'  => 80.00,  // km/h
-    'temperatura' => 90.00,  // °C
-    'consumo'     => 50.00,  // L/h
-    'vibracao'    => 3.00    // mm/s
+    'velocidade'  => 80.00,
+    'temperatura' => 90.00,
+    'consumo'     => 50.00,
+    'vibracao'    => 3.00 
 ]);
 
 function classificar_leitura($tipo, $valor) {

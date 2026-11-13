@@ -6,12 +6,12 @@
 }
 
 body {
-    background-color: #1c1c1c; 
+    background: radial-gradient(circle at 50% 30%, #2a2415 0%, #141310 60%, #0a0907 100%);
+    background-attachment: fixed;
     color: #ffffff;
     min-height: 100vh;
 }
 
-/* NAVBAR STICKY */
 .sticky-bar {
     position: sticky;
     top: 0;
@@ -22,6 +22,7 @@ body {
     align-items: center;
     height: 60px; 
     width: 100%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
 }
 
 .nav-left {
@@ -58,6 +59,11 @@ body {
     padding: 0 35px;
     border-right: 1px solid #917519;
     height: 100%;
+    transition: background-color 0.2s ease;
+}
+
+.nav-item:hover {
+    background-color: #b08d1e;
 }
 
 .nav-item a {
@@ -87,8 +93,13 @@ body {
     text-decoration: none;
     color: #ffffff;
     font-size: 20px;
-    height: 100%;      
+    height: 100%;       
     padding: 0 25px;      
+    transition: background-color 0.2s ease;
+}
+
+.user-btn:hover {
+    background-color: #b08d1e;
 }
 
 .user-icon {
@@ -97,36 +108,37 @@ body {
     fill: #000000;
 }
 
-/* CONTEÚDO PRINCIPAL */
 .main-content {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 30px 20px;
+    padding: 35px 20px;
 }
 
 .welcome-title {
     color: #dfd29d;
     font-size: 28px;
     margin-bottom: 25px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
 }
 
 .section-title {
     color: #dfd29d;
     font-size: 22px;
-    margin: 30px 0 15px 0;
+    margin: 35px 0 18px 0;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
 }
 
-/* CARTÕES DE ESTATÍSTICA / INDICADORES */
 .stats-container {
-    background-color: #cca424; 
+    background: linear-gradient(135deg, #d4af37 0%, #cca424 50%, #9e7d17 100%); 
     border-radius: 15px;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 20px;
     padding: 25px;
-    margin-bottom: 30px;
+    margin-bottom: 35px;
     color: #000000;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    box-shadow: 0 8px 25px rgba(204, 164, 36, 0.25), 0 4px 10px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 223, 0, 0.4);
 }
 
 .info-card {
@@ -137,7 +149,7 @@ body {
 }
 
 .stat-number {
-    font-size: 40px;
+    font-size: 42px;
     font-weight: bold;
     color: #000000;
     margin-bottom: 5px;
@@ -159,12 +171,14 @@ body {
     font-style: italic;
 }
 
-/* SEÇÃO DO GRÁFICO CSS */
 .chart-section {
-    background-color: #2a2a2a;
+    background-color: rgba(30, 27, 20, 0.85);
     padding: 25px;
     border-radius: 15px;
-    margin-bottom: 30px;
+    margin-bottom: 35px;
+    border: 1px solid rgba(204, 164, 36, 0.3);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
 }
 
 .chart-section h2 {
@@ -189,19 +203,21 @@ body {
     width: 180px;
     font-size: 14px;
     font-weight: bold;
+    color: #ffffff;
 }
 
 .chart-bar-bg {
     flex: 1;
     height: 22px;
-    background-color: #444444;
+    background-color: #383428;
     border-radius: 11px;
     overflow: hidden;
+    border: 1px solid rgba(204, 164, 36, 0.2);
 }
 
 .chart-bar-fill {
     height: 100%;
-    background-color: #cca424;
+    background: linear-gradient(90deg, #b08d1e 0%, #ffd700 100%);
     border-radius: 11px;
     transition: width 0.4s ease;
 }
@@ -210,6 +226,7 @@ body {
     width: 50px;
     font-weight: bold;
     font-size: 14px;
+    color: #dfd29d;
 }
 
 .no-data-msg {
@@ -217,7 +234,6 @@ body {
     font-style: italic;
 }
 
-/* PACOTES DE VIAGEM */
 .packages-container {
     display: flex;
     justify-content: space-between;
@@ -234,13 +250,16 @@ body {
     overflow: hidden;
     background-size: cover;
     background-position: center;
-    border: 1px solid #333;
-    transition: transform 0.2s;
+    border: 1px solid rgba(204, 164, 36, 0.4);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     display: block;
 }
 
 .pacote-card:hover {
-    transform: scale(1.01);
+    transform: translateY(-4px) scale(1.01);
+    border-color: #ffd700;
+    box-shadow: 0 10px 25px rgba(255, 215, 0, 0.25);
 }
 
 .pacote-content {
@@ -249,7 +268,7 @@ body {
     left: 0;
     width: 100%;
     padding: 25px;
-    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+    background: linear-gradient(transparent, rgba(10, 9, 7, 0.95));
     display: flex;
     flex-direction: column;
 }
@@ -258,6 +277,7 @@ body {
     font-size: 22px;
     font-weight: bold;
     margin-bottom: 4px;
+    color: #ffffff;
 }
 
 .pacote-serra {
@@ -270,12 +290,13 @@ body {
 
 .parcelamento {
     font-size: 13px;
-    opacity: 0.9;
+    color: #dfd29d;
 }
 
 .preco {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: bold;
+    color: #ffd700;
 }
 
 .tag-oferta {

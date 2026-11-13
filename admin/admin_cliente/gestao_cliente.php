@@ -2,7 +2,6 @@
 session_start();
 require_once __DIR__ . '/../../config/conexao.php';
 
-// Bloqueio de acesso no backend para não-administradores
 if (!isset($_SESSION['id_usuario']) || ($_SESSION['papel'] ?? '') !== 'administrador') {
     header("Location: ../../pagina-inicial/index.php");
     exit;
@@ -11,17 +10,14 @@ if (!isset($_SESSION['id_usuario']) || ($_SESSION['papel'] ?? '') !== 'administr
 $mensagem = "";
 $tipo_mensagem = "";
 
-// Check/Garantia da coluna 'ativo' na tabela usuario
 if (isset($conexao) && $conexao) {
     try {
         $conexao->query("SELECT ativo FROM usuario LIMIT 1");
     } catch (mysqli_sql_exception $e) {
-        // Se a coluna não existir, cria automaticamente
         @$conexao->query("ALTER TABLE usuario ADD COLUMN ativo TINYINT(1) NOT NULL DEFAULT 1");
     }
 }
 
-// --- PROCESSAR EDIÇÃO / CADASTRO DE USUÁRIO ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_salvar'])) {
     $id_usuario_form = !empty($_POST['id_usuario']) ? intval($_POST['id_usuario']) : null;
     $nome            = trim($_POST['nome'] ?? '');
@@ -34,7 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_salvar'])) {
         $tipo_mensagem = "erro";
     } else {
         if ($id_usuario_form) {
-            // TRAVA 3: Alteração de perfil verificada e processada no servidor
             if (!empty($senha)) {
                 $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
                 $stmt = $conexao->prepare("UPDATE usuario SET nome = ?, login = ?, papel = ?, senha = ? WHERE id = ?");
@@ -52,7 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_salvar'])) {
                 $tipo_mensagem = "erro";
             }
         } else {
-            // Cadastro de novo usuário
             if (empty($senha)) {
                 $mensagem = "Informe uma senha para cadastrar o novo usuário!";
                 $tipo_mensagem = "erro";
@@ -73,24 +67,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_salvar'])) {
     }
 }
 
-// --- PROCESSAR DESATIVAÇÃO (SOFT DELETE EM VEZ DE DELETE FÍSICO) ---
 if (isset($_GET['desativar'])) {
     $id_desativar = intval($_GET['desativar']);
     $id_logado    = intval($_SESSION['id_usuario']);
 
-    // TRAVA 1: O usuário não pode desativar a própria conta
     if ($id_desativar === $id_logado) {
         $mensagem = "Ação negada: Você não pode desativar a sua própria conta!";
         $tipo_mensagem = "erro";
     } else {
-        // TRAVA 2: Verificar se é o último administrador ativo
         $res_admin = $conexao->query("SELECT COUNT(*) AS total_admins FROM usuario WHERE papel = 'administrador' AND (ativo = 1 OR ativo IS NULL)");
         $qtd_admins = 0;
         if ($res_admin && $r_adm = $res_admin->fetch_assoc()) {
             $qtd_admins = intval($r_adm['total_admins']);
         }
 
-        // Checar papel do usuário alvo
         $stmt_chk = $conexao->prepare("SELECT papel FROM usuario WHERE id = ?");
         $stmt_chk->bind_param("i", $id_desativar);
         $stmt_chk->execute();
@@ -100,7 +90,6 @@ if (isset($_GET['desativar'])) {
             $mensagem = "Ação negada: Não é possível desativar o único administrador ativo do sistema!";
             $tipo_mensagem = "erro";
         } else {
-            // Executa a DESATIVAÇÃO
             try {
                 $stmt = $conexao->prepare("UPDATE usuario SET ativo = 0 WHERE id = ?");
                 $stmt->bind_param("i", $id_desativar);
@@ -115,7 +104,6 @@ if (isset($_GET['desativar'])) {
     }
 }
 
-// --- PROCESSAR REATIVAÇÃO ---
 if (isset($_GET['reativar'])) {
     $id_reativar = intval($_GET['reativar']);
     $stmt = $conexao->prepare("UPDATE usuario SET ativo = 1 WHERE id = ?");
@@ -126,7 +114,6 @@ if (isset($_GET['reativar'])) {
     }
 }
 
-// Feedbacks visuais
 if (isset($_GET['msg'])) {
     if ($_GET['msg'] === 'criado') { $mensagem = "Usuário cadastrado com sucesso!"; $tipo_mensagem = "sucesso"; }
     elseif ($_GET['msg'] === 'atualizado') { $mensagem = "Usuário atualizado com sucesso!"; $tipo_mensagem = "sucesso"; }
@@ -134,7 +121,6 @@ if (isset($_GET['msg'])) {
     elseif ($_GET['msg'] === 'reativado') { $mensagem = "Usuário reativado com sucesso!"; $tipo_mensagem = "sucesso"; }
 }
 
-// --- CONSULTA E BUSCA DE USUÁRIOS ---
 $termo_busca = trim($_GET['busca'] ?? '');
 
 try {
@@ -148,7 +134,6 @@ try {
         $usuarios = $conexao->query("SELECT id, nome, login, papel, COALESCE(ativo, 1) AS ativo FROM usuario ORDER BY id DESC");
     }
 } catch (mysqli_sql_exception $e) {
-    // Fallback caso a tabela ainda não tenha sido alterada
     if (!empty($termo_busca)) {
         $stmt = $conexao->prepare("SELECT id, nome, login, papel, 1 AS ativo FROM usuario WHERE nome LIKE ? OR login LIKE ? ORDER BY id DESC");
         $param_like = "%{$termo_busca}%";
@@ -160,7 +145,6 @@ try {
     }
 }
 
-// Dados para edição
 $usuario_edicao = null;
 if (isset($_GET['editar'])) {
     $id_editar = intval($_GET['editar']);
@@ -211,7 +195,6 @@ $primeiro_nome = explode(' ', trim($nome_completo))[0];
             <div class="alert-msg <?php echo $tipo_mensagem; ?>"><?php echo htmlspecialchars($mensagem); ?></div>
         <?php endif; ?>
 
-        <!-- Formulário de Cadastro / Edição -->
         <section class="form-section">
             <h2><?php echo $usuario_edicao ? 'Editar Usuário' : 'Cadastrar Novo Usuário'; ?></h2>
             <form method="POST" action="gestao_cliente.php" class="form-grid">
@@ -252,7 +235,6 @@ $primeiro_nome = explode(' ', trim($nome_completo))[0];
             </form>
         </section>
 
-        <!-- Filtro de Busca -->
         <section class="search-section">
             <form method="GET" action="gestao_cliente.php" class="filter-form">
                 <input type="text" name="busca" placeholder="Buscar por Nome ou Login..." value="<?php echo htmlspecialchars($termo_busca); ?>">
@@ -263,7 +245,6 @@ $primeiro_nome = explode(' ', trim($nome_completo))[0];
             </form>
         </section>
 
-        <!-- Tabela de Listagem de Usuários -->
         <section class="table-section">
             <table class="data-table">
                 <thead>

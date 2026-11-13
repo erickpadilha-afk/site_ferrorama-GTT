@@ -47,7 +47,8 @@
 }
 
 body {
-    background-color: var(--bg-page); 
+    background: radial-gradient(circle at 50% 30%, #2a2415 0%, #141310 60%, #0a0907 100%);
+    background-attachment: fixed;
     color: var(--text-white);
     min-height: 100vh;
     animation: fadeInPage 0.3s ease-in-out; 
@@ -64,6 +65,7 @@ body {
     height: 60px; 
     padding: 0;
     width: 100%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
 }
 
 .nav-left {
@@ -103,6 +105,10 @@ body {
     transition: background-color var(--transition-normal), color var(--transition-normal);
 }
 
+.nav-item:hover {
+    background-color: #b08d1e;
+}
+
 .nav-item a {
     text-decoration: none;
     color: var(--text-white); 
@@ -136,6 +142,13 @@ body {
     text-decoration: none;
     color: var(--text-white);
     font-size: 22px;
+    height: 100%;
+    padding: 0 15px;
+    transition: background-color 0.2s ease;
+}
+
+.user-btn:hover {
+    background-color: #b08d1e;
 }
 
 .user-btn.active-user {
@@ -167,11 +180,12 @@ body {
 }
 
 .trains-section h2 {
-    color: var(--gold-main);
+    color: var(--gold-light);
     text-align: center;
     font-size: 22px;
     margin-bottom: 30px;
     font-weight: normal;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
 }
 
 .trains-section h2 small {
@@ -185,17 +199,20 @@ body {
 }
 
 .train-card {
-    background-color: var(--gold-main);
+    background: linear-gradient(135deg, #d4af37 0%, #cca424 50%, #9e7d17 100%);
     color: var(--text-black);
     display: flex;
     align-items: center;
     padding: 15px 20px;
     border-radius: var(--radius-small);
-    transition: transform var(--transition-fast);
+    border: 1px solid rgba(255, 223, 0, 0.3);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .train-card:hover {
-    transform: translateX(4px);
+    transform: translateX(6px);
+    box-shadow: 0 6px 18px rgba(255, 215, 0, 0.25);
 }
 
 .train-icon {
@@ -224,12 +241,14 @@ body {
 }
 
 .search-box {
-    background-color: var(--gold-main);
+    background: linear-gradient(135deg, #d4af37 0%, #cca424 50%, #9e7d17 100%);
     padding: 30px 20px;
     border-radius: var(--radius-large);
     display: flex;
     flex-direction: column;
     gap: 15px;
+    box-shadow: 0 8px 25px rgba(204, 164, 36, 0.25), 0 4px 10px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 223, 0, 0.4);
 }
 
 .input-group {
@@ -274,7 +293,6 @@ body {
     font-size: 16px;
     cursor: pointer;
     border-radius: var(--radius-small);
-    transition: background-color var(--transition-fast);
     transition: all 0.2s ease;
 }
 
@@ -459,7 +477,6 @@ body {
     background-color: #222222;
 }
 
-
 .search-filters {
     display: flex;
     gap: 15px;
@@ -468,7 +485,7 @@ body {
 }
 
 .filter-box {
-    background-color: var(--gold-main);
+    background: linear-gradient(135deg, #d4af37 0%, #cca424 50%, #9e7d17 100%);
     color: var(--text-dark);
     padding: 10px 15px;
     border-radius: 12px;
@@ -476,6 +493,8 @@ body {
     align-items: center;
     font-weight: 600;
     font-size: 14px;
+    border: 1px solid rgba(255, 223, 0, 0.4);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .cid-est {
@@ -539,12 +558,14 @@ body {
 }
 
 .ticket-card {
-    background-color: var(--gold-main);
+    background: linear-gradient(135deg, #d4af37 0%, #cca424 50%, #9e7d17 100%);
     border-radius: 12px;
     padding: 20px;
-    color: var(--text-white);
+    color: var(--text-black);
     display: flex;
     flex-direction: column;
+    border: 1px solid rgba(255, 223, 0, 0.4);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
 }
 
 .card-date {
@@ -581,7 +602,7 @@ body {
 .radio-circle {
     width: 28px;
     height: 28px;
-    border: 2px solid var(--text-white);
+    border: 2px solid var(--text-black);
     border-radius: 50%;
     flex-shrink: 0;
     display: inline-block;
@@ -614,11 +635,13 @@ body {
 }
 
 .checkout-card {
-    background-color: var(--gold-main);
+    background: linear-gradient(135deg, #d4af37 0%, #cca424 50%, #9e7d17 100%);
     border-radius: 12px;
     padding: 20px;
     color: var(--text-dark);
     height: fit-content;
+    border: 1px solid rgba(255, 223, 0, 0.4);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
 }
 
 .checkout-title {

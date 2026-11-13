@@ -11,7 +11,6 @@ body {
     min-height: 100vh;
 }
 
-/* --- NAVBAR / HEADER --- */
 .sticky-bar {
     position: sticky;
     top: 0;
@@ -35,7 +34,6 @@ body {
 .user-btn { display: flex; align-items: center; gap: 10px; text-decoration: none; color: #ffffff; font-size: 20px; padding: 0 25px; }
 .user-icon { width: 24px; height: 24px; fill: #000; }
 
-/* --- CONTEÚDO PRINCIPAL --- */
 .main-content {
     max-width: 1100px;
     margin: 0 auto;
@@ -56,7 +54,6 @@ body {
     margin-bottom: 25px;
 }
 
-/* --- MENSAGENS DE ALERTA --- */
 .alert-msg {
     padding: 12px 20px;
     border-radius: 8px;
@@ -66,7 +63,6 @@ body {
 .alert-msg.sucesso { background-color: #2e7d32; color: #fff; }
 .alert-msg.erro { background-color: #c62828; color: #fff; }
 
-/* --- SEÇÃO DO FORMULÁRIO --- */
 .form-section {
     background-color: #cca424;
     color: #000;
@@ -133,7 +129,6 @@ body {
     display: inline-block;
 }
 
-/* --- SEÇÃO DE BUSCA --- */
 .search-section {
     margin-bottom: 20px;
 }
@@ -172,7 +167,6 @@ body {
     align-items: center;
 }
 
-/* --- TABELA DE DADOS --- */
 .table-section {
     overflow-x: auto;
 }
@@ -197,28 +191,26 @@ body {
     font-weight: bold;
 }
 
-/* Garante que a coluna de temperatura tenha largura suficiente */
 .data-table th:nth-child(5),
 .data-table td:nth-child(5) {
     min-width: 110px;
 }
 
 .temp-badge {
-    display: inline-flex;       /* Garante que o número e o °C fiquem alinhados */
+    display: inline-flex; 
     align-items: center;
     justify-content: center;
     padding: 4px 12px;
     border-radius: 12px;
     font-weight: bold;
     font-size: 13px;
-    white-space: nowrap;        /* Impede qualquer quebra de linha */
-    min-width: 95px;            /* Largura suficiente para valores de 3 dígitos + decimais */
+    white-space: nowrap; 
+    min-width: 95px;
 }
 
 .temp-normal { background-color: #2e7d32; color: #fff; }
 .temp-alta { background-color: #d32f2f; color: #fff; }
 
-/* Status do Alerta Calculado (Entrega 4) */
 .status-badge {
     padding: 4px 10px;
     border-radius: 12px;

@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Reset dos formulários para garantir que entrem limpos
     const formEtapa1 = document.getElementById('formEtapa1');
     if (formEtapa1) {
         formEtapa1.reset();

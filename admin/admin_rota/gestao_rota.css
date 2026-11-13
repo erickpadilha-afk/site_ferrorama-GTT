@@ -11,7 +11,6 @@ body {
     min-height: 100vh;
 }
 
-/* --- HEADER / NAVIGATION --- */
 
 .sticky-bar {
     position: sticky;
@@ -103,7 +102,6 @@ body {
     fill: #000000;
 }
 
-/* --- MAIN CONTENT --- */
 
 .main-content {
     max-width: 1200px;
@@ -128,7 +126,6 @@ body {
     font-weight: normal;
 }
 
-/* --- MESSAGES & ALERTS --- */
 
 .alert-msg {
     padding: 12px 20px;
@@ -147,7 +144,6 @@ body {
     color: #ffffff;
 }
 
-/* --- FORM SECTION --- */
 
 .form-section {
     background-color: #cca424;
@@ -222,7 +218,6 @@ body {
     font-weight: bold;
 }
 
-/* --- SEARCH & FILTERS --- */
 
 .search-section {
     margin-bottom: 25px;
@@ -269,7 +264,6 @@ body {
     align-items: center;
 }
 
-/* --- TABLE SECTION --- */
 
 .table-section {
     overflow-x: auto;
@@ -296,7 +290,6 @@ body {
     font-weight: bold;
 }
 
-/* STATUS BADGES */
 
 .badge {
     padding: 5px 10px;
@@ -312,7 +305,6 @@ body {
 .status-concluida { background-color: #2e7d32; color: #ffffff; }
 .status-cancelada { background-color: #c62828; color: #ffffff; }
 
-/* TABLE ACTIONS */
 
 .actions-cell {
     display: flex;

@@ -2,7 +2,6 @@
 session_start();
 require_once __DIR__ . '/../../config/conexao.php';
 
-// Verificação de permissão de acesso
 if (!isset($_SESSION['id_usuario']) || ($_SESSION['papel'] ?? '') !== 'administrador') {
     header("Location: ../../pagina-inicial/index.php");
     exit;
@@ -11,7 +10,6 @@ if (!isset($_SESSION['id_usuario']) || ($_SESSION['papel'] ?? '') !== 'administr
 $mensagem = "";
 $tipo_mensagem = "";
 
-// --- SALVAR OU ATUALIZAR ROTA ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_salvar'])) {
     $id_rota      = !empty($_POST['id_rota']) ? intval($_POST['id_rota']) : null;
     $id_trem      = intval($_POST['id_trem'] ?? 0);
@@ -50,7 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_salvar'])) {
     }
 }
 
-// --- EXCLUIR ROTA ---
 if (isset($_GET['excluir'])) {
     $id_excluir = intval($_GET['excluir']);
     $stmt = $conexao->prepare("DELETE FROM rotas WHERE id_rota = ?");
@@ -64,17 +61,14 @@ if (isset($_GET['excluir'])) {
     }
 }
 
-// Feedback via URL
 if (isset($_GET['msg'])) {
     if ($_GET['msg'] === 'criado') { $mensagem = "Rota cadastrada com sucesso!"; $tipo_mensagem = "sucesso"; }
     elseif ($_GET['msg'] === 'atualizado') { $mensagem = "Rota atualizada com sucesso!"; $tipo_mensagem = "sucesso"; }
     elseif ($_GET['msg'] === 'excluido') { $mensagem = "Rota excluída com sucesso!"; $tipo_mensagem = "sucesso"; }
 }
 
-// Dados para a caixa de seleção de trens
 $trens_select = $conexao->query("SELECT id_trem, prefixo_trem, modelo_trem FROM trens ORDER BY prefixo_trem ASC");
 
-// --- FILTROS DE CONSULTA ---
 $f_status      = trim($_GET['status'] ?? '');
 $f_id_trem     = intval($_GET['id_trem'] ?? 0);
 $f_data_inicio = trim($_GET['data_inicio'] ?? '');
@@ -127,7 +121,6 @@ if (!empty($valores)) {
     $rotas = $conexao->query($sql);
 }
 
-// Dados para edição
 $rota_edicao = null;
 if (isset($_GET['editar'])) {
     $id_editar = intval($_GET['editar']);
@@ -162,7 +155,6 @@ $primeiro_nome = explode(' ', trim($nome_completo))[0];
             </ul>
         </div>
         <div class="nav-right">
-            <!-- Link padronizado apontando para o perfil do administrador -->
             <a href="../admin_usuario.php" class="user-btn">
                 <span><?php echo htmlspecialchars($primeiro_nome); ?></span>
                 <svg class="user-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
@@ -178,7 +170,6 @@ $primeiro_nome = explode(' ', trim($nome_completo))[0];
             <div class="alert-msg <?php echo $tipo_mensagem; ?>"><?php echo htmlspecialchars($mensagem); ?></div>
         <?php endif; ?>
 
-        <!-- Formulário de Cadastro / Edição -->
         <section class="form-section">
             <h2><?php echo $rota_edicao ? 'Editar Rota' : 'Cadastrar Nova Rota'; ?></h2>
             <form method="POST" action="gestao_rota.php" class="form-grid">
@@ -240,7 +231,6 @@ $primeiro_nome = explode(' ', trim($nome_completo))[0];
             </form>
         </section>
 
-        <!-- Filtros de Pesquisa -->
         <section class="search-section">
             <form method="GET" action="gestao_rota.php" class="filter-form">
                 <input type="text" name="busca" placeholder="Buscar Origem/Destino..." value="<?php echo htmlspecialchars($f_busca); ?>">
@@ -272,7 +262,6 @@ $primeiro_nome = explode(' ', trim($nome_completo))[0];
             </form>
         </section>
 
-        <!-- Tabela de Listagem -->
         <section class="table-section">
             <table class="data-table">
                 <thead>

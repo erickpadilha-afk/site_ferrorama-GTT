@@ -7,16 +7,25 @@ if (!isset($_SESSION['id_usuario'])) {
     exit;
 }
 
+$papel = $_SESSION['papel'] ?? 'cliente';
+if ($papel === 'cliente') {
+    header("Location: ../dashboard/dashboard.php");
+    exit;
+}
+
+$id_usuario  = $_SESSION['id_usuario'];
 $tipo        = trim($_GET['tipo'] ?? 'desempenho');
 $data_inicio = trim($_GET['data_inicio'] ?? date('Y-m-01'));
 $data_fim    = trim($_GET['data_fim'] ?? date('Y-m-d'));
 $exportar    = isset($_GET['exportar']) && $_GET['exportar'] === 'csv';
+$historico   = isset($_GET['historico']) && $_GET['historico'] === '1';
 
-// Ajustar data fim para abranger até 23:59:59
-$data_fim_busca = $data_fim . ' 23:59:59';
+$data_inicio_busca = $data_inicio . ' 00:00:00';
+$data_fim_busca    = $data_fim . ' 23:59:59';
 
 $dados = [];
 $titulo_relatorio = "Relatório Operacional";
+$usar_datetime = true;
 
 if ($tipo === 'desempenho') {
     $titulo_relatorio = "Relatório de Desempenho (Velocidade Média e Máxima)";
@@ -38,6 +47,7 @@ if ($tipo === 'desempenho') {
             GROUP BY t.id_trem";
 } elseif ($tipo === 'eficiencia') {
     $titulo_relatorio = "Relatório de Eficiência Operacional (Status das Viagens)";
+    $usar_datetime = false;
     $sql = "SELECT t.prefixo_trem AS 'Prefixo', r.status AS 'Status', COUNT(*) AS 'Quantidade de Viagens' 
             FROM rotas r 
             INNER JOIN trens t ON r.id_trem = t.id_trem 
@@ -56,22 +66,32 @@ if ($tipo === 'desempenho') {
 if (isset($conexao) && $conexao) {
     try {
         $stmt = $conexao->prepare($sql);
-        $stmt->bind_param("ss", $data_inicio, $data_fim_busca);
+        if ($usar_datetime) {
+            $stmt->bind_param("ss", $data_inicio_busca, $data_fim_busca);
+        } else {
+            $stmt->bind_param("ss", $data_inicio, $data_fim);
+        }
         $stmt->execute();
         $res = $stmt->get_result();
         while ($row = $res->fetch_assoc()) {
             $dados[] = $row;
         }
+
+        // Salva no banco de dados apenas na primeira visualização (não ao exportar CSV ou abrir do histórico)
+        if (!$exportar && !$historico) {
+            $total_reg = count($dados);
+            $stmt_log = $conexao->prepare("INSERT INTO relatorios_emitidos (fk_id_usuario, tipo_relatorio, titulo, data_inicio, data_fim, total_registros) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt_log->bind_param("issssi", $id_usuario, $tipo, $titulo_relatorio, $data_inicio, $data_fim, $total_reg);
+            $stmt_log->execute();
+        }
     } catch (Exception $e) {}
 }
 
-// --- EXPORTAÇÃO CSV ---[cite: 9]
 if ($exportar) {
     header('Content-Type: text/csv; charset=utf-8');
-    header('Content-Disposition: attachment; filename=relatorio_' . $tipo . '.csv');
+    header('Content-Disposition: attachment; filename=relatorio_' . $tipo . '_' . date('Ymd') . '.csv');
     
     $out = fopen('php://output', 'w');
-    // Adicionar BOM UTF-8 para correta acentuação no Excel[cite: 14]
     fputs($out, "\xEF\xBB\xBF");
 
     if (!empty($dados)) {
@@ -79,13 +99,15 @@ if ($exportar) {
         foreach ($dados as $linha) {
             fputcsv($out, $linha, ';');
         }
+    } else {
+        fputcsv($out, ['Aviso'], ';');
+        fputcsv($out, ['Nenhum dado encontrado para o periodo selecionado.'], ';');
     }
     fclose($out);
     exit;
 }
 
-$id_usuario = $_SESSION['id_usuario'];
-$nome_exibicao = 'Usuário';
+$nome_exibicao = $_SESSION['nome'] ?? 'Maquinista';
 if (isset($conexao) && $conexao) {
     try {
         $stmt_u = $conexao->prepare("SELECT nome FROM usuario WHERE id = ?");
@@ -101,7 +123,6 @@ if (isset($conexao) && $conexao) {
 }
 $primeiro_nome = explode(' ', trim($nome_exibicao))[0];
 
-// Montar URL limpa para o botão de exportar
 $query_params = $_GET;
 $query_params['exportar'] = 'csv';
 $url_exportar = 'visualiza_relatorio.php?' . http_build_query($query_params);
@@ -112,15 +133,15 @@ $url_exportar = 'visualiza_relatorio.php?' . http_build_query($query_params);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualizar Relatório - GTT</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
 
     <nav class="sticky-bar no-print">
         <div class="nav-left">
             <div class="logo-container">
-                <a href="../dashboard/dashboard.php">
-                    <img src="../images/GTT-logo.png" alt="Logo" class="nav-logo" onerror="this.style.display='none'">
+                <a href="gera_relatorio.php">
+                    <img src="../images/GTT-logo.png" alt="Golden Train Track Logo" class="nav-logo" onerror="this.style.display='none'">
                 </a>
             </div>
             <ul class="nav-links">
@@ -129,9 +150,11 @@ $url_exportar = 'visualiza_relatorio.php?' . http_build_query($query_params);
             </ul>
         </div>
         <div class="nav-right">
-            <a href="../dashboard/Barra/usuario/usuario.php" class="user-btn">
+            <a href="maquinista_usuario.php" class="user-btn">
                 <span><?php echo htmlspecialchars($primeiro_nome); ?></span>
-                <svg class="user-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                <svg class="user-icon" viewBox="0 0 24 24">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
             </a>
         </div>
     </nav>
@@ -173,7 +196,9 @@ $url_exportar = 'visualiza_relatorio.php?' . http_build_query($query_params);
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
-                        <tr><td class="empty-table">Nenhum dado encontrado para o período selecionado.</td></tr>
+                        <tr>
+                            <td class="empty-table">Nenhum dado encontrado para o período selecionado.</td>
+                        </tr>
                     <?php endif; ?>
                 </tbody>
             </table>

@@ -2,36 +2,33 @@
 session_start();
 require_once __DIR__ . '/../config/conexao.php';
 
-// Bloqueio de acesso para usuários não autenticados ou não administradores
 if (!isset($_SESSION['id_usuario'])) {
     header("Location: ../pagina-inicial/index.php");
     exit;
 }
 
-if (isset($_SESSION['papel']) && $_SESSION['papel'] !== 'administrador') {
+if (isset($_SESSION['papel']) &&$_SESSION['papel'] !== 'administrador') {
     header("Location: ../dashboard/dashboard.php");
     exit;
 }
 
-// Obter nome do usuário logado
 if (isset($_SESSION['nome']) && !empty($_SESSION['nome'])) {
-    $nome_completo = $_SESSION['nome'];
+    $nome_completo =$_SESSION['nome'];
 } else {
-    $id_usuario = $_SESSION['id_usuario'];
-    $stmt = $conexao->prepare("SELECT nome FROM usuario WHERE id = ?");
-    $stmt->bind_param("i", $id_usuario);
-    $stmt->execute();
-    $res = $stmt->get_result();
+    $id_usuario =$_SESSION['id_usuario'];
+    $stmt =$conexao->prepare("SELECT nome FROM usuario WHERE id = ?");
+    $stmt->bind_param("i", $id_usuario);$stmt->execute();
+    $res =$stmt->get_result();
     
-    if ($user = $res->fetch_assoc()) {
-        $nome_completo = $user['nome'];
+    if ($user =$res->fetch_assoc()) {
+        $nome_completo =$user['nome'];
     } else {
-        $nome_completo = $_SESSION['login'] ?? 'Usuário';
+        $nome_completo =$_SESSION['login'] ?? 'Usuário';
     }
 }
 
 $partes_nome = explode(' ', trim($nome_completo));
-$primeiro_nome = $partes_nome[0];
+$primeiro_nome =$partes_nome[0];
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -39,7 +36,7 @@ $primeiro_nome = $partes_nome[0];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel de Controle - Admin</title>
-    <link rel="stylesheet" href="controle.css">
+    <link rel="stylesheet" href="controle.css?v=6">
 </head>
 <body>
 
@@ -73,7 +70,6 @@ $primeiro_nome = $partes_nome[0];
 
         <section class="control-grid">
             
-            <!-- Gestão de Trens -->
             <a href="admin_trem/gestao_trem.php" class="control-card">
                 <div class="card-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -87,7 +83,6 @@ $primeiro_nome = $partes_nome[0];
                 <p>Listar, buscar, cadastrar, editar e excluir trens com validação.</p>
             </a>
 
-            <!-- Gestão de Sensores -->
             <a href="admin_sensor/gestao_sensor.php" class="control-card">
                 <div class="card-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -98,7 +93,6 @@ $primeiro_nome = $partes_nome[0];
                 <p>Cadastrar sensores vinculados aos trens, listar, editar e consultar indicador.</p>
             </a>
 
-            <!-- Gestão de Rotas -->
             <a href="admin_rota/gestao_rota.php" class="control-card">
                 <div class="card-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -109,7 +103,6 @@ $primeiro_nome = $partes_nome[0];
                 <p>Listar, filtrar por status/data/trem, cadastrar, editar e excluir viagens.</p>
             </a>
 
-            <!-- Central de Alertas (Bloco 3) -->
             <a href="../notificacoes_alertas.php" class="control-card">
                 <div class="card-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -122,7 +115,6 @@ $primeiro_nome = $partes_nome[0];
                 <p>Visualizar notificações ativas com filtro por severidade e alertas críticos.</p>
             </a>
 
-            <!-- Simulador de Leituras (Bloco 3) -->
             <a href="../simulador.php" class="control-card">
                 <div class="card-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -133,7 +125,6 @@ $primeiro_nome = $partes_nome[0];
                 <p>Gerar leituras automáticas e anomalias para testes do sistema.</p>
             </a>
 
-            <!-- Gestão de Usuários -->
             <a href="admin_cliente/gestao_cliente.php" class="control-card">
                 <div class="card-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

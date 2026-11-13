@@ -3,7 +3,6 @@ session_start();
 require_once __DIR__ . '/config/conexao.php';
 require_once __DIR__ . '/includes/limites.php';
 
-// Verificação de autenticação
 if (!isset($_SESSION['id_usuario'])) {
     header("Location: pagina-inicial/index.php");
     exit;
@@ -21,37 +20,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['gerar'])) {
         $mensagem = "Selecione um trem válido!";
         $tipo_msg = "erro";
     } else {
-        // PREPARAÇÃO DAS CONSULTAS FORA DO LAÇO (Requisito do Guia)
         $stmt_leitura = $conexao->prepare("INSERT INTO leitura_sensor (fk_id_trem, data_hora, velocidade_kmh, temperatura_motor_c, consumo_litros_hora, vibracao_mm_s) VALUES (?, ?, ?, ?, ?, ?)");
         $stmt_alerta  = $conexao->prepare("INSERT INTO alertas (id_leitura, tipo, severidade, mensagem, data_hora) VALUES (?, ?, ?, ?, ?)");
 
         $alertas_gerados = 0;
 
         for ($i = 0; $i < $quantidade; $i++) {
-            // Recua o tempo 1 minuto a cada volta
             $data_hora = date('Y-m-d H:i:s', time() - ($i * 60));
 
-            // Valores normais base
-            $vel  = mt_rand(4000, 7500) / 100; // 40.00 a 75.00 km/h
-            $temp = mt_rand(6000, 8500) / 100; // 60.00 a 85.00 °C
-            $cons = mt_rand(2000, 4500) / 100; // 20.00 a 45.00 L/h
-            $vib  = mt_rand(50, 250) / 100;    // 0.50 a 2.50 mm/s
+            $vel  = mt_rand(4000, 7500) / 100;
+            $temp = mt_rand(6000, 8500) / 100;
+            $cons = mt_rand(2000, 4500) / 100;
+            $vib  = mt_rand(50, 250) / 100;
 
-            // Se opção de anomalias estiver ligada, força alteração crítica a cada 3 voltas
             if ($gerar_anomalias && $i % 3 === 0) {
-                $temp = mt_rand(9500, 11500) / 100; // Temperatura alta (95°C a 115°C)
+                $temp = mt_rand(9500, 11500) / 100;
             }
 
-            // Grava a leitura na tabela leitura_sensor
             $stmt_leitura->bind_param("isdddd", $fk_id_trem, $data_hora, $vel, $temp, $cons, $vib);
             $stmt_leitura->execute();
             $id_leitura = $conexao->insert_id;
 
-            // Avalia classificação de regras
             $sev_temp = classificar_leitura('temperatura', $temp);
             $sev_vel  = classificar_leitura('velocidade', $vel);
 
-            // Gera alerta de temperatura se ultrapassar limite
             if ($sev_temp !== 'normal') {
                 $msg = "Temperatura elevada no motor: " . number_format($temp, 1, ',', '.') . " °C";
                 $tipo = "temperatura";
@@ -60,7 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['gerar'])) {
                 $alertas_gerados++;
             }
 
-            // Gera alerta de velocidade se ultrapassar limite
             if ($sev_vel !== 'normal') {
                 $msg = "Excesso de velocidade detectado: " . number_format($vel, 1, ',', '.') . " km/h";
                 $tipo = "velocidade";
@@ -78,7 +69,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['gerar'])) {
     }
 }
 
-// Lista de Trens
 $trens = $conexao->query("SELECT id_trem, prefixo_trem, modelo_trem FROM trens ORDER BY prefixo_trem ASC");
 ?>
 <!DOCTYPE html>

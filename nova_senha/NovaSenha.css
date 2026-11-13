@@ -54,7 +54,6 @@ body {
     margin-bottom: 5px;
 }
 
-/* Removido o bloco/fundo preto envolvente */
 .login-box {
     display: flex;
     flex-direction: column;
@@ -66,7 +65,6 @@ body {
     color: #ffffff !important;
 }
 
-/* Formulário em coluna */
 .login-form {
     display: flex;
     flex-direction: column;
@@ -83,7 +81,6 @@ body {
     -webkit-text-fill-color: goldenrod;
 }
 
-/* Estilização dos Inputs idêntica às outras telas */
 input,
 .input-group input {
     width: 280px;
@@ -92,22 +89,20 @@ input,
     background-color: rgba(102, 96, 61, 1);
     color: goldenrod;
     font-size: 16px;
-    padding: 10px 15px !important; /* Espaçamento interno à esquerda */
+    padding: 10px 15px !important;
     outline: none;
     border-radius: 6px;
-    text-align: left !important; /* Texto alinhado no início do bloco */
+    text-align: left !important;
     transition: all 0.2s ease;
-    caret-color: #ffffff; /* Cursor em branco */
+    caret-color: #ffffff;
 }
 
-/* Placeholder */
 input::placeholder {
     color: goldenrod;
     opacity: 1;
     transition: opacity 0.2s ease;
 }
 
-/* Hover nos campos */
 .input-group input:hover {
     background-color: rgb(70, 66, 45);
     border: 2px solid rgb(124, 118, 81);
@@ -116,7 +111,6 @@ input::placeholder {
     text-align: left !important;
 }
 
-/* Efeito ao clicar / focar no campo */
 input:focus::placeholder {
     opacity: 0;
 }

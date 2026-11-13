@@ -2,7 +2,6 @@
 session_start();
 require_once __DIR__ . '/../config/conexao.php';
 
-// Bloqueio de acesso para usuários não autenticados ou não administradores
 if (!isset($_SESSION['id_usuario'])) {
     header("Location: ../pagina-inicial/index.php");
     exit;
@@ -17,7 +16,6 @@ $id_usuario = $_SESSION['id_usuario'];
 $mensagem = "";
 $tipo_mensagem = "";
 
-// Processar atualização do próprio perfil
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_salvar_perfil'])) {
     $nome  = trim($_POST['nome'] ?? '');
     $login = trim($_POST['login'] ?? '');
@@ -48,7 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_salvar_perfil'])
     }
 }
 
-// Buscar dados do usuário logado diretamente com base no esquema da tabela
 $stmt = $conexao->prepare("SELECT id, nome, login, papel FROM usuario WHERE id = ?");
 $stmt->bind_param("i", $id_usuario);
 $stmt->execute();
@@ -63,11 +60,11 @@ $primeiro_nome = explode(' ', trim($nome_exibicao))[0];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meu Perfil - Administrador</title>
-    <link rel="stylesheet" href="admin_usuario.css">
+    <link rel="stylesheet" href="admin_usuario.css?v=5">
 </head>
 <body>
 
-  <nav class="sticky-bar">
+    <nav class="sticky-bar">
         <div class="nav-left">
             <div class="logo-container">
                 <a href="admin.php">
@@ -99,7 +96,6 @@ $primeiro_nome = explode(' ', trim($nome_exibicao))[0];
 
         <div class="profile-container">
             
-            <!-- Cartão Visual do Perfil -->
             <section class="profile-card">
                 <div class="avatar-circle">
                     <img src="../images/usua.png" alt="Foto do Usuário" onerror="this.src='https://via.placeholder.com/120'">
@@ -116,7 +112,6 @@ $primeiro_nome = explode(' ', trim($nome_exibicao))[0];
                 <a href="../pagina-inicial/index.php" class="btn-logout">Sair do Sistema</a>
             </section>
 
-            <!-- Formulário para Editar Dados do Próprio Perfil -->
             <section class="form-section">
                 <h2>Editar Meus Dados</h2>
                 

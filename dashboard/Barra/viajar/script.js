@@ -6,20 +6,24 @@ document.addEventListener("DOMContentLoaded", () => {
     function updateCheckout() {
         const selectedRadio = document.querySelector('.radio-input:checked');
         
-        if (selectedRadio) {
+        if (selectedRadio && checkoutPriceText && checkoutClassText) {
             const parentLabel = selectedRadio.closest('.class-option');
-            const currentPrice = parentLabel.querySelector('.class-price').textContent.trim();
-            const currentClassName = parentLabel.querySelector('.class-name').textContent.trim();
             
-            checkoutPriceText.textContent = currentPrice;
-            checkoutClassText.textContent = currentClassName;
+            if (parentLabel) {
+                const priceElement = parentLabel.querySelector('.class-price');
+                const classElement = parentLabel.querySelector('.class-name');
+
+                if (priceElement && classElement) {
+                    checkoutPriceText.textContent = priceElement.textContent.trim();
+                    checkoutClassText.textContent = classElement.textContent.trim();
+                }
+            }
         }
     }
 
     radioButtons.forEach(radio => {
         radio.addEventListener('change', updateCheckout);
     });
-
 
     updateCheckout();
 });

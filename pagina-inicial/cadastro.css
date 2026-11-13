@@ -52,7 +52,6 @@ body {
     margin-bottom: 5px;
 }
 
-/* Container sem fundo/caixa preta */
 .login-box {
     display: flex;
     flex-direction: column;
@@ -78,7 +77,6 @@ body {
     -webkit-text-fill-color: goldenrod;
 }
 
-/* Estilo Base dos Inputs e Select com Alinhamento à Esquerda */
 input, select,
 .input-group input,
 .input-group select {
@@ -88,29 +86,26 @@ input, select,
     background-color: rgba(102, 96, 61, 1);
     color: goldenrod;
     font-size: 16px;
-    padding: 10px 15px !important; /* Espaçamento para o texto não colar na borda */
+    padding: 10px 15px !important;
     outline: none;
     border-radius: 6px;
-    text-align: left !important; /* Alinhado ao início do bloco */
+    text-align: left !important;
     transition: all 0.2s ease;
-    caret-color: #ffffff; /* Cursor pisca-pisca em branco */
+    caret-color: #ffffff;
 }
 
-/* Estilização das Opções do Select */
 select option {
     background-color: rgb(51, 49, 41);
     color: goldenrod;
     text-align: left !important;
 }
 
-/* Transição do Placeholder */
 input::placeholder {
     color: goldenrod;
     opacity: 1;
     transition: opacity 0.2s ease;
 }
 
-/* Hover nos Campos */
 .input-group input:hover, 
 .input-group select:hover {
     background-color: rgb(70, 66, 45);
@@ -120,7 +115,6 @@ input::placeholder {
     text-align: left !important;
 }
 
-/* Efeito ao Clicar / Focar no Campo */
 input:focus::placeholder {
     opacity: 0;
 }
@@ -176,4 +170,20 @@ input:focus::placeholder {
 #btn-voltar:hover {
     color: rgb(231, 183, 61);
     text-decoration: underline;
+}
+body {
+    display: flex;
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    min-height: 100vh;
+    gap: 15px; 
+    background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('background-trem-2.png');
+    background-color: #000000;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: Arial, sans-serif;
+    text-align: center;
 }

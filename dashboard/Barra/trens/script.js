@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    
 
     const typeButtons = document.querySelectorAll(".type-btn");
 
@@ -10,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-
     const searchForm = document.getElementById("search-form");
 
     if (searchForm) {
@@ -19,20 +17,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const origem = document.getElementById("origem").value;
             const destino = document.getElementById("destino").value;
-            const passageiros = document.getElementById("passageiros").value;
-            const tipoViagem = document.querySelector(".type-btn.active").dataset.type;
 
-            console.log(`Buscando bilhetes:`, {
-                origem,
-                destino,
-                passageiros,
-                tipoViagem
-            });
-
-            alert(`Buscando bilhetes de ${origem} para ${destino}...`);
+            if (origem && destino) {
+                window.location.href = "../viajar/viajar.php";
+            }
         });
     }
-
 
     const couponLink = document.getElementById("add-coupon");
     if (couponLink) {

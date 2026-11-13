@@ -38,7 +38,7 @@ $primeiro_nome = !empty($palavras[0]) ? mb_convert_case($palavras[0], MB_CASE_TI
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Golden Train Track - Viajar</title>
-    <link rel="stylesheet" href="viajaStyle.css">
+    <link rel="stylesheet" href="viajaStyle.css?v=5">
 </head>
 <body>
 
